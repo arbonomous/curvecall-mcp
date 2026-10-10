@@ -1,8 +1,28 @@
 # CurveCall
 
-Pay-per-call market math and token intel for AI agents via x402 (USDC on Base). Built by [arbonomous](https://github.com/arbonomous).
+**Pay-per-call market math and token intel for AI agents.** Quote a trade, check slippage and get rug-risk signals in one paid call. No API keys, no signup. Agents pay $0.001-$0.02 per call in USDC on Base via [x402](https://x402.org) v2. Built by [arbonomous](https://github.com/arbonomous).
 
-CoinGecko tells you the price. CurveCall tells you what your buy will do: quote, slippage and rug-risk in one paid call. No API keys, no signup. Agents pay $0.001-$0.02 per call in USDC on Base via x402 v2.
+<p align="center"><b><a href="https://curvecall.onrender.com">Live service</a></b> &middot; <a href="https://curvecall.onrender.com/openapi.json">OpenAPI</a> &middot; <a href="https://curvecall.onrender.com/mcp/">MCP endpoint</a> &middot; <a href="https://curvecall.onrender.com/llms.txt">llms.txt</a></p>
+
+> **Repo map:** this public repo is the docs and discovery page for CurveCall. The service source code lives in a separate private repository and is not published here. Nothing in this repo runs the service.
+
+CoinGecko tells you the price. CurveCall tells you what your buy will do.
+
+## How it works
+
+```mermaid
+sequenceDiagram
+  participant A as Agent (MCP or HTTP client)
+  participant C as CurveCall
+  participant F as x402 facilitator
+  A->>C: call a tool with no payment
+  C-->>A: 402 + payment request
+  A->>F: sign USDC payment (exact scheme)
+  A->>C: retry with PAYMENT-SIGNATURE
+  C->>F: verify
+  C-->>A: 2xx data
+  C->>F: settle only after a 2xx
+```
 
 ## Use it
 
@@ -104,6 +124,12 @@ x402 v2, USDC on Base, `exact` scheme. Prices are per call; errors are never cha
 - Smithery: `arbonomous/curvecall`
 - Glama: `io.github.arbonomous/curvecall`
 - x402scan: `curvecall.onrender.com`
+
+## Honest limits
+
+- Outputs are data and signals, never buy or sell recommendations. Rug-risk signals are heuristics and can be wrong.
+- Coverage varies: market data follows what Dexscreener indexes; on-chain reads cover base, ethereum, arbitrum, optimism, polygon and bsc; the deployer index and bundle signals cover a smaller set of chains (listed above).
+- This is a small independent service. Payments settle through a third-party x402 facilitator, and the hosted service has no uptime guarantee.
 
 ## Why this repo exists
 
