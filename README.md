@@ -1,6 +1,6 @@
 # CurveCall
 
-**Pay-per-call market math and token intel for AI agents.** Quote a trade, check slippage and get rug-risk signals in one paid call. No API keys, no signup. Agents pay $0.001-$0.02 per call in USDC on Base via [x402](https://x402.org) v2. Built by [arbonomous](https://github.com/arbonomous).
+**Pay-per-call market math and token intel for AI agents.** Quote a trade, check slippage and get rug-risk signals in one paid call. No API keys, no signup. Agents pay $0.001-$0.02 per call via [x402](https://x402.org) v2: USDC on Base, plus USDC on Solana or shielded ZEC over the HTTP API. Built by [arbonomous](https://github.com/arbonomous).
 
 <p align="center"><b><a href="https://curvecall.onrender.com">Live service</a></b> &middot; <a href="https://curvecall.onrender.com/openapi.json">OpenAPI</a> &middot; <a href="https://curvecall.onrender.com/mcp/">MCP endpoint</a> &middot; <a href="https://curvecall.onrender.com/llms.txt">llms.txt</a></p>
 
@@ -108,7 +108,7 @@ Any client that speaks streamable-HTTP MCP can connect directly to `https://curv
 # 1. Call without payment - you get the 402 payment request back
 curl -i "https://curvecall.onrender.com/v1/token/base/0x.../risk"
 
-# 2. Pay per the accepts[] terms (USDC on Base, exact scheme), then retry
+# 2. Pay per the accepts[] terms (see the accepts list; USDC on Base is `exact`), then retry
 #    with the signed payload in the PAYMENT-SIGNATURE header.
 ```
 
@@ -116,7 +116,7 @@ Any x402 v2 client SDK handles this handshake automatically.
 
 ## Payment
 
-x402 v2, USDC on Base, `exact` scheme. Prices are per call; errors are never charged (payment settles only after a 2xx response). Tools return data and signals; they never tell you what to buy.
+x402 v2. Every 402 offers USDC on Base (`exact` scheme, used by MCP and HTTP), and over the HTTP API also USDC on Solana and shielded ZEC (Zcash). See the live llms.txt for current details. Prices are per call; errors are never charged (payment settles only after a 2xx response). Tools return data and signals; they never tell you what to buy.
 
 ## Listings
 
